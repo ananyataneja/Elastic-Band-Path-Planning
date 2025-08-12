@@ -10,6 +10,7 @@ tasks:
     init: |
       sudo apt-get update
       sudo apt-get install -y openjfx tigervnc-standalone-server novnc websockify
+      javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
     command: |
       vncserver :1 -geometry 1024x768 -localhost no
       websockify --web /usr/share/novnc/ 6080 localhost:5901 &
