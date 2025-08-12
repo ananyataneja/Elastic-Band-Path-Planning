@@ -1,0 +1,16 @@
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  - port: 6080
+    onOpen: open-preview
+
+tasks:
+  - name: Start JavaFX App
+    init: |
+      sudo apt-get update
+      sudo apt-get install -y openjfx tigervnc-standalone-server novnc websockify
+    command: |
+      vncserver :1 -geometry 1024x768 -localhost no
+      websockify --web /usr/share/novnc/ 6080 localhost:5901 &
+      DISPLAY=:1 java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
