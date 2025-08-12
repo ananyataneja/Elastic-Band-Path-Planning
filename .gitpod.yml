@@ -8,14 +8,14 @@ ports:
 tasks:
   - name: Start JavaFX App
     init: |
+      echo "🚀 Installing dependencies..."
       sudo apt-get update
       sudo apt-get install -y openjfx tigervnc-standalone-server novnc websockify
-      javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
     command: |
       vncserver :1 -geometry 1024x768 -localhost no
       websockify --web /usr/share/novnc/ 6080 localhost:5901 &
 
-      echo "⏳ Waiting for VNC server to be ready..."
+      echo "⏳ Waiting for VNC display to be ready..."
       for i in {1..15}; do
         if [ -e /tmp/.X11-unix/X1 ]; then
           echo "✅ VNC server is ready."
