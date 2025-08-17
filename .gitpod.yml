@@ -28,4 +28,5 @@ tasks:
       javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
 
       echo "▶️ Running JavaFX program..."
+      export DISPLAY=:1
       DISPLAY=:1 java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
