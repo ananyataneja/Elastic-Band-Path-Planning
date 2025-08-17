@@ -6,27 +6,20 @@ ports:
     onOpen: open-preview
 
 tasks:
-  - name: Start JavaFX App
-    init: |
-      echo "🚀 Installing dependencies..."
-      sudo apt-get update
-      sudo apt-get install -y openjfx tigervnc-standalone-server novnc websockify
+  - name: Start GUI + Run JavaFX App
     command: |
-      vncserver :1 -geometry 1024x768 -localhost no
+      # Start VNC server
+      vncserver :1 -geometry 1280x800 -localhost no
+
+      # Bridge VNC → noVNC
       websockify --web /usr/share/novnc/ 6080 localhost:5901 &
 
-      echo "⏳ Waiting for VNC display to be ready..."
-      for i in {1..15}; do
-        if [ -e /tmp/.X11-unix/X1 ]; then
-          echo "✅ VNC server is ready."
-          break
-        fi
-        sleep 1
-      done
+      # Give VNC a moment to start
+      sleep 3
 
-      echo "🔨 Compiling JavaFX program..."
-      javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
-
-      echo "▶️ Running JavaFX program..."
+      # Export display so JavaFX can open a window
       export DISPLAY=:1
-      DISPLAY=:1 java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
+
+      # Compile and run your program
+      javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
+      java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
