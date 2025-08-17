@@ -17,6 +17,9 @@ tasks:
       # Give VNC a moment to start
       sleep 3
 
+      # Start lightweight window manager
+      fluxbox &
+
       # Export display so JavaFX can open a window
       export DISPLAY=:1
 
