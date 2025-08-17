@@ -1,9 +1,16 @@
 FROM gitpod/workspace-full
 
-# Install JavaFX + desktop environment + VNC + noVNC
 USER root
+
+# Install only what we actually need: OpenJFX + VNC + minimal X11 + lightweight WM
 RUN apt-get update && \
-    apt-get install -y openjfx xfce4 xfce4-terminal tigervnc-standalone-server novnc websockify && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get install -y \
+      openjfx \
+      tigervnc-standalone-server \
+      novnc \
+      websockify \
+      fluxbox \
+      xterm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER gitpod
