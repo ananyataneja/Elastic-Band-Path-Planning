@@ -24,5 +24,8 @@ tasks:
         sleep 1
       done
 
-      export DISPLAY=:1
-      java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
+      echo "🔨 Compiling JavaFX program..."
+      javac --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement.java
+
+      echo "▶️ Running JavaFX program..."
+      DISPLAY=:1 java --module-path /usr/share/openjfx/lib --add-modules javafx.controls,javafx.fxml ElasticBandImplement
