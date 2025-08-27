@@ -7,6 +7,7 @@ import javafx.scene.paint.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.*;
 
@@ -63,6 +64,43 @@ public class ElasticBandImplement extends Application {
 
     @Override
     public void start(Stage stg) {
+        // === Robot position and radius ===
+        TextInputDialog dialog1 = new TextInputDialog("1 1 0.3");
+        dialog1.setHeaderText("Enter robot position X Y and radius (space separated):");
+        String[] parts1 = dialog1.showAndWait().orElse("1 1 0.3").split("\\s+");
+        double bx = Double.parseDouble(parts1[0]);
+        double by = Double.parseDouble(parts1[1]);
+        double br = Double.parseDouble(parts1[2]);
+
+        // === Goal position ===
+        TextInputDialog dialog2 = new TextInputDialog("10 10");
+        dialog2.setHeaderText("Enter goal position X Y:");
+        String[] parts2 = dialog2.showAndWait().orElse("10 10").split("\\s+");
+        double gx = Double.parseDouble(parts2[0]);
+        double gy = Double.parseDouble(parts2[1]);
+
+        bot = new Bot(bx, by, br, gx, gy);
+
+        // === Number of obstacles ===
+        TextInputDialog dialog3 = new TextInputDialog("0");
+        dialog3.setHeaderText("Enter number of obstacles:");
+        int n = Integer.parseInt(dialog3.showAndWait().orElse("0"));
+
+        for (int i = 0; i < n; i++) {
+            TextInputDialog oDialog = new TextInputDialog("5 5 0.5 0.0 0.0");
+            oDialog.setHeaderText("Enter obstacle " + (i+1) + " position X Y, radius, speed, direction:");
+            String[] oParts = oDialog.showAndWait().orElse("5 5 0.5 0.0 0.0").split("\\s+");
+
+            double x = Double.parseDouble(oParts[0]);
+            double y = Double.parseDouble(oParts[1]);
+            double r = Double.parseDouble(oParts[2]);
+            double s = Double.parseDouble(oParts[3]);
+            double d = Double.parseDouble(oParts[4]);
+
+            obs.add(new Obs(x, y, r, s, d));
+        }
+
+        // === Setup canvas and simulation ===
         Canvas can = new Canvas(600, 600);
         GraphicsContext gc = can.getGraphicsContext2D();
         Pane pane = new Pane(can);
@@ -239,22 +277,6 @@ public class ElasticBandImplement extends Application {
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        System.out.print("Enter robot position X Y and radius: ");
-        double bx = in.nextDouble(), by = in.nextDouble(), br = in.nextDouble();
-        System.out.print("Enter goal position X Y: ");
-        double gx = in.nextDouble(), gy = in.nextDouble();
-        bot = new ElasticBandImplement().new Bot(bx, by, br, gx, gy);
-
-        System.out.print("Enter number of obstacles: ");
-        int n = in.nextInt();
-        for (int i = 0; i < n; i++) {
-            System.out.printf("Enter obstacle %d position X Y, radius, speed, direction: ", i + 1);
-            double x = in.nextDouble(), y = in.nextDouble();
-            double r = in.nextDouble(), s = in.nextDouble(), d = in.nextDouble();
-            obs.add(new ElasticBandImplement().new Obs(x, y, r, s, d));
-        }
-
         launch(args);
     }
 }
